@@ -2,5 +2,13 @@
 
 <div id="messages"></div>
 
-<canvas id="spo2-graph" width="400" height="400"></canvas>
-<canvas id="hr-graph" width="400" height="400"></canvas>
+<div class="container">
+	<div class="row">
+		<div class="column">
+			<canvas id="spo2-graph" width="400" height="400"></canvas>
+		</div>
+		<div class="column">
+			<canvas id="hr-graph" width="400" height="400"></canvas>
+		</div>
+	</div>
+</div>

@@ -30,23 +30,17 @@ var spo2Config = {
   data: {
     datasets: [{
       label: 'SpO2',
-      backgroundColor: color('rgb(255, 99, 132)').alpha(0.5).rgbString(),
-      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: color(chartColors.blue).alpha(0.5).rgbString(),
+      borderColor: chartColors.blue,
       fill: false,
       data: [],
-    }, {
-      label: 'IR Light',
-      backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
-      borderColor: window.chartColors.blue,
-      fill: false,
-      data: []
     }]
   },
   options: {
     responsive: true,
     title: {
       display: true,
-      text: 'Chart.js Time Point Data'
+      text: ''
     },
     scales: {
       xAxes: [{
@@ -89,7 +83,7 @@ var hrConfig = {
     responsive: true,
     title: {
       display: true,
-      text: 'Chart.js Time Point Data'
+      text: ''
     },
     scales: {
       xAxes: [{
