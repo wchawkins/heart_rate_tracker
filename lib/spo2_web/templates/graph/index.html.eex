@@ -1,8 +1,6 @@
-<section class="phx-hero">
-  <h1>SpO2 Graph</h1>
-  <p>Or should it be Plot...</p>
-</section>
+<h1>SpO2 Graph</h1>
 
 <div id="messages"></div>
 
-<canvas id="sensor-graph" width="400" height="400"></canvas>
+<canvas id="spo2-graph" width="400" height="400"></canvas>
+<canvas id="hr-graph" width="400" height="400"></canvas>

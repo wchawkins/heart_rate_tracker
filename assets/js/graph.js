@@ -2,7 +2,8 @@ import Chart from "chart.js"
 import moment from "moment"
 import socket from "./socket"
 
-var ctx = document.getElementById("sensor-graph").getContext('2d');
+var spo2Ctx = document.getElementById("spo2-graph").getContext('2d');
+var hrCtx = document.getElementById("hr-graph").getContext('2d');
 
 function newDate(days) {
   return moment().add(days, 'd').toDate();
@@ -23,11 +24,12 @@ window.chartColors = {
 };
 
 var color = Chart.helpers.color;
-var config = {
+
+var spo2Config = {
   type: 'line',
   data: {
     datasets: [{
-      label: 'Red Light',
+      label: 'SpO2',
       backgroundColor: color('rgb(255, 99, 132)').alpha(0.5).rgbString(),
       borderColor: 'rgb(255, 99, 132)',
       fill: false,
@@ -72,25 +74,70 @@ var config = {
   }
 };
 
-window.myLine = new Chart(ctx, config);
+var hrConfig = {
+  type: 'line',
+  data: {
+    datasets: [{
+      label: 'Heart Rate',
+      backgroundColor: color('rgb(255, 99, 132)').alpha(0.5).rgbString(),
+      borderColor: 'rgb(255, 99, 132)',
+      fill: false,
+      data: [],
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+      text: 'Chart.js Time Point Data'
+    },
+    scales: {
+      xAxes: [{
+        type: 'time',
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: 'Date'
+        },
+        ticks: {
+          major: {
+            fontStyle: 'bold',
+            fontColor: '#FF0000'
+          }
+        }
+      }],
+      yAxes: [{
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: 'value'
+        }
+      }]
+    }
+  }
+};
+
+window.spo2Chart = new Chart(spo2Ctx, spo2Config);
+window.heartRateChart = new Chart(hrCtx, hrConfig);
 
 function randomScalingFactor() {
   const max = 250
   return Math.floor(Math.random() * Math.floor(max))
 }
 
-function plot(red, ir) {
-  if (config.data.datasets.length > 0) {
-    config.data.datasets[0].data.push({
-      x: newDateString(config.data.datasets[0].data.length + 2),
-      y: red
+function plot(spo2, hr) {
+  if (spo2Config.data.datasets.length > 0) {
+    spo2Config.data.datasets[0].data.push({
+      x: newDateString(spo2Config.data.datasets[0].data.length + 2),
+      y: spo2
     });
-    config.data.datasets[1].data.push({
-      x: newDate(config.data.datasets[1].data.length + 2),
-      y: ir
+    hrConfig.data.datasets[0].data.push({
+      x: newDate(hrConfig.data.datasets[0].data.length + 2),
+      y: hr
     });
 
-    window.myLine.update();
+    window.spo2Chart.update();
+    window.heartRateChart.update();
   }
 };
 
@@ -101,7 +148,7 @@ let messagesContainer = document.querySelector("#messages")
 
 channel.on("new_data", payload => {
   console.log(payload)
-  plot(payload.sample.red, payload.sample.ir)
+  plot(payload.spo2, payload.hr)
   // let msgItm = document.createElement("li")
   // msgItm.innerText = `Red: ${payload.sample.red}, IR: ${payload.sample.ir}`
   // messagesContainer.appendChild(msgItm)
