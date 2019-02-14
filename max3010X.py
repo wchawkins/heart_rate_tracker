@@ -89,11 +89,6 @@ class MAX3010X():
         self._write(REG_INTR_ENABLE_1, [0xc0])
         self._write(REG_INTR_ENABLE_2, [0x00])
 
-        # Reset the Read, Write and Overflow registers
-        self._write(REG_FIFO_RD_PTR, [0x00])
-        self._write(REG_FIFO_WR_PTR, [0x00])
-        self._write(REG_OVF_COUNTER, [0x00])
-
         """ FIFO Configuration - Register 0x08
         | B7  | B6  | B5 |      B4       | B3 | B2 | B1 | B0 |
         |-----|-----|----|---------------|----|----|----|----|
@@ -106,6 +101,7 @@ class MAX3010X():
         # 0b 0010 0111
         # SPO2_ADC range = 4096nA, SPO2 sample rate = 100Hz, LED pulse-width = 411uS
         self._write(REG_SPO2_CONFIG, [0x27])
+        # self.set_sample_rate(sample_rate)
 
         # choose value for ~7mA for LED1
         self._write(REG_LED1_PA, [0x24])
@@ -113,6 +109,11 @@ class MAX3010X():
         self._write(REG_LED2_PA, [0x24])
         # choose value fro ~25mA for Pilot LED
         self._write(REG_PILOT_PA, [0x7f])
+
+        # Reset the Read, Write and Overflow registers
+        self._write(REG_FIFO_RD_PTR, [0x00])
+        self._write(REG_FIFO_WR_PTR, [0x00])
+        self._write(REG_OVF_COUNTER, [0x00])
 
     def shutdown(self):
         """
@@ -137,7 +138,7 @@ class MAX3010X():
         # Zero (AND) the bits of interest using mask then
         # set them to value (OR)
         new = (current[0] & mask) | value
-        self._write(register, new)
+        self._write(register, [new])
 
     def set_sample_rate(self, sample_rate):
         """
