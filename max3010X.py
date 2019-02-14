@@ -125,6 +125,68 @@ class MAX3010X():
         """
         self._write(REG_MODE_CONFIG, [0x40])
 
+    def bit_mask(self, register, mask, value):
+        """
+        Apply `mask` to current `register` with `value`
+        and set it again.
+        """
+        # Get current register value
+        current = self._read(register)
+        # Zero (AND) the bits of interest using mask then
+        # set them to value (OR)
+        new = (current & mask) | value
+        self._write(register, new)
+
+    def set_sample_rate(self, sample_rate):
+        """
+        sample_rate should be the number of samples per second
+        the sensor should measure. It will be rounded down to
+        one of the supported sample rate values.
+
+        Register: 0x0A
+        Bits: 2-4
+        SR[2:0] | SAMPLES PER SECOND
+        000     | 50
+        001     | 100
+        010     | 200
+        011     | 400
+        100     | 800
+        101     | 1000
+        110     | 1600
+        111     | 3200
+        """
+        # binary value to set register for SR
+        sr = 0b0
+        if sample_rate < 100:
+            # 50 sps
+            sr = 0b000
+        elif sample_rate < 200:
+            # 100 sps
+            sr = 0b001
+        elif sample_rate < 400:
+            # 200 sps
+            sr = 0b010
+        elif sample_rate < 800:
+            # 400 sps
+            sr = 0b011
+        elif sample_rate < 1000:
+            # 800 sps
+            sr = 0b100
+        elif sample_rate < 1600:
+            # 1000 sps
+            sr = 0b101
+        elif sample_rate < 3200:
+            # 1600 sps
+            sr = 0b110
+        else:
+            # 3200 sps
+            sr = 0b111
+
+        # Shift it over since SR starts at 2nd bit of register
+        sr <<= 2
+        self.bit_mask(REG_SPO2_CONFIG, 0b11100011, sr)
+
+
     def read_from_fifo(self):
         """
         This function will read the data register.
@@ -133,8 +195,8 @@ class MAX3010X():
         ir_led = None
 
         # read 1 byte from registers (values are discarded)
-        reg_INTR1 = self._read(REG_INTR_STATUS_1)
-        reg_INTR2 = self._read(REG_INTR_STATUS_2)
+        # reg_INTR1 = self._read(REG_INTR_STATUS_1)
+        # reg_INTR2 = self._read(REG_INTR_STATUS_2)
 
         # read 6-byte data from the device
         d = self._read(REG_FIFO_DATA, 6)
