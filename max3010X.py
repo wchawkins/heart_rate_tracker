@@ -80,7 +80,8 @@ class MAX3010X():
 
     def setup(self, sample_rate=100, sample_avg=4):
         """
-        This will setup the device with the values written in sample Arduino code.
+        This will setup the device with some default configuration.
+        TODO: Allow sample_rate and sample_avg to be specified
         """
         # INTR setting
         # 0xc0 : A_FULL_EN and PPG_RDY_EN = Interrupt will be triggered when
@@ -95,9 +96,12 @@ class MAX3010X():
         # FIFO_RD_PTR[4:0]
         self._write(REG_FIFO_RD_PTR, [0x00])
 
-        # 0b 0100 1111
-        # sample avg = 4, fifo rollover = false, fifo almost full = 17
-        self._write(REG_FIFO_CONFIG, [0x4f])
+        """ FIFO Configuration - Register 0x08
+        | B7  | B6  | B5 |      B4       | B3 | B2 | B1 | B0 |
+        |-----|-----|----|---------------|----|----|----|----|
+        | Sample Average | FIFO_ROLLOVER |    FIFO_A_FULL    |
+        """
+        self._write(REG_FIFO_CONFIG, [0b01011111])
 
         # 0x02 for read-only, 0x03 for SpO2 mode, 0x07 multimode LED
         self._write(REG_MODE_CONFIG, [0x03])
@@ -125,7 +129,7 @@ class MAX3010X():
         """
         self._write(REG_MODE_CONFIG, [0x40])
 
-    def bit_mask(self, register, mask, value):
+    def write_masked(self, register, mask, value):
         """
         Apply `mask` to current `register` with `value`
         and set it again.
@@ -134,7 +138,7 @@ class MAX3010X():
         current = self._read(register)
         # Zero (AND) the bits of interest using mask then
         # set them to value (OR)
-        new = (current & mask) | value
+        new = (current[0] & mask) | value
         self._write(register, new)
 
     def set_sample_rate(self, sample_rate):
@@ -184,8 +188,7 @@ class MAX3010X():
 
         # Shift it over since SR starts at 2nd bit of register
         sr <<= 2
-        self.bit_mask(REG_SPO2_CONFIG, 0b11100011, sr)
-
+        self.write_masked(REG_SPO2_CONFIG, 0b11100011, sr)
 
     def read_from_fifo(self):
         """
@@ -227,25 +230,24 @@ class MAX3010X():
 
         return red_buf, ir_buf
     
-    def get_read_pointer(self):
+    def read_ptr(self):
+        """ Get the position of the FIFO read pointer """ 
         return self._read(REG_FIFO_RD_PTR)
     
-    def get_write_pointer(self):
+    def write_ptr(self):
+        """ Get the position of the FIFO write pointer """ 
         return self._read(REG_FIFO_WR_PTR)
 
-    def get_number_of_available_samples(self):
-        # NUM_AVAILABLE_SAMPLES = FIFO_WR_PTR – FIFO_RD_PTR
-        write_ptr = self._read(REG_FIFO_WR_PTR)
-        print(write_ptr)
-        read_ptr = self._read(REG_FIFO_RD_PTR)
-        print(read_ptr)
-        # return write_ptr - read_ptr
-        return 3
+    def available_samples(self):
+        """ Get the number of sample available to be read from the FIFO """ 
+        # TODO: Account for pointer wrap around, whatever
+        # that means...
+        return self.write_ptr() - self.read_ptr()
 
     def read_fifo(self):
         """
         Read all available samples from FIFO
         """
-        num_available_samples = self.get_number_of_available_samples()
+        num_available_samples = self.available_samples()
         for i in range(num_available_samples):
             print(self.read_from_fifo())
