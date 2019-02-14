@@ -89,12 +89,10 @@ class MAX3010X():
         self._write(REG_INTR_ENABLE_1, [0xc0])
         self._write(REG_INTR_ENABLE_2, [0x00])
 
-        # FIFO_WR_PTR[4:0]
-        self._write(REG_FIFO_WR_PTR, [0x00])
-        # OVF_COUNTER[4:0]
-        self._write(REG_OVF_COUNTER, [0x00])
-        # FIFO_RD_PTR[4:0]
+        # Reset the Read, Write and Overflow registers
         self._write(REG_FIFO_RD_PTR, [0x00])
+        self._write(REG_FIFO_WR_PTR, [0x00])
+        self._write(REG_OVF_COUNTER, [0x00])
 
         """ FIFO Configuration - Register 0x08
         | B7  | B6  | B5 |      B4       | B3 | B2 | B1 | B0 |
@@ -192,7 +190,7 @@ class MAX3010X():
 
     def read_from_fifo(self):
         """
-        This function will read the data register.
+        Read from the FIFO and return a Red, IR sample.
         """
         red_led = None
         ir_led = None
@@ -232,22 +230,30 @@ class MAX3010X():
     
     def read_ptr(self):
         """ Get the position of the FIFO read pointer """ 
-        return self._read(REG_FIFO_RD_PTR)
+        return self._read(REG_FIFO_RD_PTR)[0]
     
     def write_ptr(self):
         """ Get the position of the FIFO write pointer """ 
-        return self._read(REG_FIFO_WR_PTR)
+        return self._read(REG_FIFO_WR_PTR)[0]
 
     def available_samples(self):
         """ Get the number of sample available to be read from the FIFO """ 
-        # TODO: Account for pointer wrap around, whatever
-        # that means...
-        return self.write_ptr() - self.read_ptr()
+        # Normally, available_samples = write_ptr - read_ptr,
+        # since the write_ptr is ahead of the read_ptr, but if the write_ptr
+        # gets so far ahead of the read_ptr that it wraps back around the FIFO,
+        # it means there are actually write_prt - read_ptr + 32 samples
+        write_ptr = self.write_ptr()
+        read_ptr = self.read_ptr()
+        if (write_ptr < read_ptr):
+            return write_ptr - read_ptr + 32
+        else:
+            return write_ptr - read_ptr
 
     def read_fifo(self):
         """
         Read all available samples from FIFO
         """
         num_available_samples = self.available_samples()
+        print(num_available_samples)
         for i in range(num_available_samples):
             print(self.read_from_fifo())
