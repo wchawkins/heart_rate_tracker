@@ -2,7 +2,7 @@ defmodule Spo2Web.Endpoint do
   use Phoenix.Endpoint, otp_app: :spo2
 
   socket("/socket", Spo2Web.DataSocket,
-    websocket: true,
+    websocket: [timeout: 45_000],
     longpoll: false
   )
 
