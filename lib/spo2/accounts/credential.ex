@@ -1,12 +1,13 @@
 defmodule Spo2.Accounts.Credential do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Spo2.Accounts.User
 
   schema "credentials" do
     field :email, :string
     field :hashed_password, :string
     field :session_secret, :string
-    field :user_id, :id
+    belongs_to :user, User
 
     timestamps()
   end
@@ -14,8 +15,8 @@ defmodule Spo2.Accounts.Credential do
   @doc false
   def changeset(credential, attrs) do
     credential
-    |> cast(attrs, [:email, :hashed_password, :session_secret])
-    |> validate_required([:email, :hashed_password, :session_secret])
+    |> cast(attrs, [:email])
+    |> validate_required([:email])
     |> unique_constraint(:email)
   end
 end

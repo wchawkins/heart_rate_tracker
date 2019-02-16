@@ -6,7 +6,7 @@ defmodule Spo2.Repo.Migrations.CreateCredentials do
       add :email, :string
       add :hashed_password, :string
       add :session_secret, :string
-      add :user_id, references(:users, on_delete: :nothing)
+      add :user_id, references(:users, on_delete: :delete_all), null: false
 
       timestamps()
     end

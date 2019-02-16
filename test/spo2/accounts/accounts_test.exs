@@ -16,7 +16,9 @@ defmodule Spo2.AccountsTest do
         |> Enum.into(@valid_attrs)
         |> Accounts.create_user()
 
-      user
+      # Not sure if it's the right thing to preload the Credential here or if
+      # it should be done already in Account.create_user/1...
+      user |> Repo.preload(:credential)
     end
 
     test "list_users/0 returns all users" do
@@ -67,9 +69,9 @@ defmodule Spo2.AccountsTest do
   describe "credentials" do
     alias Spo2.Accounts.Credential
 
-    @valid_attrs %{email: "some email", hashed_password: "some hashed_password", session_secret: "some session_secret"}
-    @update_attrs %{email: "some updated email", hashed_password: "some updated hashed_password", session_secret: "some updated session_secret"}
-    @invalid_attrs %{email: nil, hashed_password: nil, session_secret: nil}
+    @valid_attrs %{email: "some email", password: "some password"}
+    @update_attrs %{email: "some updated email", password: "some updated password"}
+    @invalid_attrs %{email: nil, password: nil}
 
     def credential_fixture(attrs \\ %{}) do
       {:ok, credential} =
@@ -103,7 +105,10 @@ defmodule Spo2.AccountsTest do
 
     test "update_credential/2 with valid data updates the credential" do
       credential = credential_fixture()
-      assert {:ok, %Credential{} = credential} = Accounts.update_credential(credential, @update_attrs)
+
+      assert {:ok, %Credential{} = credential} =
+               Accounts.update_credential(credential, @update_attrs)
+
       assert credential.email == "some updated email"
       assert credential.hashed_password == "some updated hashed_password"
       assert credential.session_secret == "some updated session_secret"

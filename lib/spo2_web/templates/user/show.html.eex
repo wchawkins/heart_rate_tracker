@@ -12,6 +12,11 @@
     <%= @user.username %>
   </li>
 
+ <li>
+   <strong>Email:</strong>
+   <%= @user.credential.email %>
+ </li>
+
 </ul>
 
 <span><%= link "Edit", to: Routes.user_path(@conn, :edit, @user) %></span>

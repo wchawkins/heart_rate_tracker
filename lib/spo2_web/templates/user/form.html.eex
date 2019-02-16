@@ -13,6 +13,14 @@
   <%= text_input f, :username %>
   <%= error_tag f, :username %>
 
+ <div class="form-group">
+   <%= inputs_for f, :credential, fn cf -> %>
+     <%= label cf, :email %>
+     <%= text_input cf, :email %>
+     <%= error_tag cf, :email %>
+   <% end %>
+ </div>
+
   <div>
     <%= submit "Save" %>
   </div>
