@@ -16,9 +16,10 @@ defmodule Spo2Web.Router do
   scope "/", Spo2Web do
     pipe_through(:browser)
 
-    get("/", PageController, :index)
-    get("/graph", GraphController, :index)
-    resources("/data", DataController)
+    get "/", PageController, :index
+    get "/graph", GraphController, :index
+    resources "/data", DataController
+    resources "/users", UserController
   end
 
   # Other scopes may use custom stacks.
