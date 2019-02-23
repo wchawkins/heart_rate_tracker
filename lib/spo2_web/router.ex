@@ -17,6 +17,9 @@ defmodule Spo2Web.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/login", SessionController, :new
+    post "/login", SessionController, :create
+    get "/logout", SessionController, :delete
     get "/graph", GraphController, :index
     resources "/data", DataController
     resources "/users", UserController

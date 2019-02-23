@@ -5,6 +5,7 @@ defmodule Spo2.Accounts do
 
   import Ecto.Query, warn: false
   alias Spo2.Repo
+  alias Comeonin.Bcrypt
 
   alias Spo2.Accounts.{User, Credential}
 
@@ -59,6 +60,7 @@ defmodule Spo2.Accounts do
     %User{}
     |> User.changeset(attrs)
     |> Ecto.Changeset.cast_assoc(:credential, with: &Credential.changeset/2)
+    |> IO.inspect()
     |> Repo.insert()
   end
 
@@ -108,6 +110,48 @@ defmodule Spo2.Accounts do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  def authenticate_user(email, password) do
+    # Can we do this in one query instead of two..?
+    query =
+      from u in User,
+        inner_join: c in assoc(u, :credential),
+        where: c.email == ^email
+
+    case Repo.get_by(Credential, email: email) do
+      %Credential{} = credential ->
+        case Bcrypt.checkpw(password, credential.hashed_password) do
+          true ->
+            case Repo.one(query) do
+              %User{} = user ->
+                {:ok, user}
+
+              nil ->
+                {:error, :unauthorized}
+            end
+
+          false ->
+            {:error, :unauthorized}
+        end
+
+      nil ->
+        {:error, :unauthorized}
+    end
+
+    # case Repo.one(query) do
+    #   %User{} = user ->
+    #     IO.inspect(user)
+
+    #       true -> {:ok, user}
+
+    #   nil ->
+    #     {:error, :unauthorized}
+    # end
+  end
+
+  defp hash_password(password) do
+    Bcrypt.hashpwsalt(password)
   end
 
   # Credentials

@@ -40,6 +40,7 @@ defmodule Spo2Web do
       use Phoenix.HTML
 
       import Spo2Web.ErrorHelpers
+      import Spo2Web.ViewHelpers
       import Spo2Web.Gettext
       alias Spo2Web.Router.Helpers, as: Routes
     end

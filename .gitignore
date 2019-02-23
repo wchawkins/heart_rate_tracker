@@ -45,3 +45,6 @@ npm-debug.log
 venv/
 *.pyc
 
+# Editor stuff
+.vscode
+.elixir_ls
