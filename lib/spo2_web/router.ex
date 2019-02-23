@@ -22,7 +22,8 @@ defmodule Spo2Web.Router do
     get "/logout", SessionController, :delete
     get "/graph", GraphController, :index
     resources "/data", DataController
-    resources "/users", UserController
+    get "/users/new", UserController, :new
+    post "/users", UserController, :create
   end
 
   # Other scopes may use custom stacks.

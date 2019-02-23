@@ -16,16 +16,17 @@ defmodule Spo2Web.UserController do
 
   def create(conn, %{"user" => user_params}) do
     case Accounts.create_user(user_params) do
-      {:ok, user} ->
+      {:ok, _user} ->
         conn
         |> put_flash(:info, "Signed up successfully!")
-        |> redirect(to: Routes.user_path(conn, :show, user))
+        |> redirect(to: "/")
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
   end
 
+  @spec show(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
     render(conn, "show.html", user: user)
