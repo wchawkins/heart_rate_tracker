@@ -23,6 +23,7 @@ defmodule Spo2Web do
 
       import Plug.Conn
       import Spo2Web.Gettext
+      import Spo2Web.ControllerHelpers
       alias Spo2Web.Router.Helpers, as: Routes
     end
   end
@@ -51,6 +52,7 @@ defmodule Spo2Web do
       use Phoenix.Router
       import Plug.Conn
       import Phoenix.Controller
+      import Spo2Web.Plugs
     end
   end
 
