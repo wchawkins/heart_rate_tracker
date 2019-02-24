@@ -24,6 +24,6 @@
   <% end %>
 
   <div>
-    <%= submit "Save" %>
+    <%= submit "Submit" %>
   </div>
 <% end %>
