@@ -1,6 +1,5 @@
-""" Basically copy of algorithm from ir_pulse_ox_converter.py,
-just not using numpy or pandas in order to quickly test on Pi
-without having to download those packages. 
+""" Used to convert raw Red/IR light data from the sensor to
+pulse oximetry and heart rate data.
 """ 
 
 import math
@@ -10,23 +9,10 @@ from scipy.signal import butter, lfilter, filtfilt
 import csv
 
 def calculate_spo2_and_hr(red_buffer, ir_buffer, sample_rate, sample_avg):
-    # TODO: Implement calculation of heart rate and O2 sat 
-
-    # Typical wavelengths at 25 C (77 F) according to MAX30105 PDF
-    # Rwave = 660
-    # IRwave = 950
-    
-    # logIR = math.log10(ir)
-    # logRed = math.log10(red)
-    # ratioR = (logRed*Rwave)/(logIR*IRwave)
-    # spo2 = 110-25*ratioR
-
-    sample_rate = sample_rate / sample_avg
-
-    
     red = np.array(red_buffer)
     ir = np.array(ir_buffer)
     
+    # Typical wavelengths at 25 C (77 F) according to MAX30105 PDF
     Rwave = 660
     IRwave = 950
     
@@ -35,7 +21,6 @@ def calculate_spo2_and_hr(red_buffer, ir_buffer, sample_rate, sample_avg):
     ratioR=(logRed*Rwave)/(logIR*IRwave)
     
     spo2= 115-25*ratioR
-    
     rounded_spo2 = [ '%.2f' % elem for elem in spo2 ]
     
     #ir=ir[0:200]
@@ -43,7 +28,7 @@ def calculate_spo2_and_hr(red_buffer, ir_buffer, sample_rate, sample_avg):
     # fl = LowHR
     # fh + high filter
     # make sampling rate variable--- divided by to to make filter work
-    SR = sample_rate # in Hz
+    SR = sample_rate / sample_avg # in Hz
     LowHR =  2.0/3.0#Hz# = 40bpm
     HighHR = 4.0 #Hz = 240 bpm
     fL = LowHR/(SR/2)
@@ -58,9 +43,8 @@ def calculate_spo2_and_hr(red_buffer, ir_buffer, sample_rate, sample_avg):
     p2 = abs(filtered_frequency_data/len_data+1)
     p1 = p2[0:len_data/2+1]
 
-    max_value = np.max(p1)
     indices = np.argmax(p1)
-    freq = np.arange((len_data/2), dtype=np.float);
+    freq = np.arange((len_data/2), dtype=np.float)
     freq = SR*freq/len_data
 
     heart_rate = freq[indices]* 60 # HR in bpm
