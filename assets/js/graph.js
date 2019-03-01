@@ -136,7 +136,22 @@ function plot(spo2, hr) {
 };
 
 // Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("sensor:sensorB", {})
+let username = '';
+let token = '';
+
+const metas = document.getElementsByTagName('meta');
+for (let i = 0; i < metas.length; i++) {
+  const name = metas[i].getAttribute('name');
+  const content = metas[i].getAttribute('content');
+  switch (name) {
+    case 'username':
+      username = content;
+      break;
+    case 'channel_token':
+      token = content;
+  }
+}
+let channel = socket.channel("sensor:" + username, { params: { token: token } })
 
 let messagesContainer = document.querySelector("#messages")
 

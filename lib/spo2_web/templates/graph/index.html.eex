@@ -2,6 +2,9 @@
 
 <div id="messages"></div>
 
+<%= tag :meta, name: "username",
+               content: assigns.current_user.username %>
+
 <div class="container">
 	<div class="row">
 		<div class="column">
@@ -13,4 +16,5 @@
 	</div>
 </div>
 
+<script>window.userToken = "<%= Phoenix.Token.sign(@conn, "user salt", @current_user.id)%>"</script> 
 <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/graph.js") %>"></script>

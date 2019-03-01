@@ -15,6 +15,23 @@ defmodule Spo2Web.DataSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
+  # def connect(%{"token" => token}, socket, _connect_info) do
+  #   case token do
+  #     "super-secret-password" ->
+  #       # This is from the sensor itself - let it through
+  #       {:ok, socket}
+
+  #     _ ->
+  #       case Phoenix.Token.verify(socket, "user socket", token, max_age: 86400) do
+  #         {:ok, user_id} ->
+  #           {:ok, assign(socket, :current_user, user_id)}
+
+  #         {:error, _reason} ->
+  #           :error
+  #       end
+  #   end
+  # end
+
   def connect(_params, socket, _connect_info) do
     {:ok, socket}
   end
