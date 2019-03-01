@@ -24,6 +24,7 @@ def main(raw_data_filename):
 
     red_buffer = []
     ir_buffer = []
+
     while True:
 
         # Check if we lost samples b/c we are too slow
@@ -35,14 +36,23 @@ def main(raw_data_filename):
         available_samples = m.available_samples()
         print "Reading {} samples".format(available_samples)
 
+        # Get all the samples from the sensor and add them to our buffer
         for i in range(available_samples):
             red, ir = m.read_from_fifo()
             red_buffer.append(red)
             ir_buffer.append(ir)
     
+        # Wait until we have a decent sample size before running calculations
         if len(red_buffer) > 100:
             spo2, hr = calculate_spo2_and_hr(red_buffer, ir_buffer, SAMPLE_RATE, SAMPLE_AVG)
             send_spo2_and_hr(spo2, hr)
+
+            # Delete the oldest 32 samples from the buffer, so we're
+            # keeping our data fresh and not too big for the next round
+            # of calculations 
+            del red_buffer[:32]
+            del ir_buffer[:32]
+
         save_raw_data(red_buffer, ir_buffer, raw_data_filename)
 
         # Since the sensor is sampling at 25 Hz (after averaging) and the FIFO
