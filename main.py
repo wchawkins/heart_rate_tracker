@@ -1,20 +1,24 @@
 from converter import calculate_spo2_and_hr
 from max3010X import MAX3010X
 import time
+import sender
 import sys
+
+# Global variables
+SEND_DATA = False # Whether to enable remote transmission of data
+WS = None # Websocket object
+USERNAME = "" # Webapp username this sensor belongs to
+SAMPLE_RATE = 100
+SAMPLE_AVG = 4
 
 def save_raw_data(red_buffer, ir_buffer, filename):
     with open(filename, 'a') as file:
         for i in range(len(red_buffer)):
-            # print red_buffer[i], ir_buffer[i]
             file.write("%d,%d\n" % (red_buffer[i], ir_buffer[i]))
-    # file.close()
 
 def send_spo2_and_hr(spo2, hr):
-    print spo2, hr
+    sender.send_data(WS, USERNAME, spo2, hr, 0)
 
-SAMPLE_RATE = 100
-SAMPLE_AVG = 4
 
 def main(raw_data_filename):
     m = MAX3010X()
@@ -45,7 +49,10 @@ def main(raw_data_filename):
         # Wait until we have a decent sample size before running calculations
         if len(red_buffer) > 100:
             spo2, hr = calculate_spo2_and_hr(red_buffer, ir_buffer, SAMPLE_RATE, SAMPLE_AVG)
-            send_spo2_and_hr(spo2, hr)
+            print spo2, hr
+
+            if SEND_DATA:
+                send_spo2_and_hr(spo2, hr)
 
             # Delete the oldest 32 samples from the buffer, so we're
             # keeping our data fresh and not too big for the next round
@@ -61,4 +68,12 @@ def main(raw_data_filename):
 
 if __name__ == "__main__":
     filename = sys.argv[1]
+
+    # Making the ability to send data to the webapp optional for now
+    if len(sys.argv) > 2:
+        SEND_DATA = True
+        webapp_address = sys.argv[2]
+        USERNAME = sys.argv[3]
+        WS = sender.join(webapp_address, USERNAME)
+
     main(filename)
