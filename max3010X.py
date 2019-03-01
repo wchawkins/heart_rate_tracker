@@ -4,7 +4,7 @@
 from __future__ import print_function
 from time import sleep
 
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 import smbus
 
 # i2c address-es
@@ -61,8 +61,8 @@ class MAX3010X():
         self.interrupt = gpio_pin
 
         # set gpio mode
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(self.interrupt, GPIO.IN)
+        # GPIO.setmode(GPIO.BOARD)
+        # GPIO.setup(self.interrupt, GPIO.IN)
 
         self.reset()
 
