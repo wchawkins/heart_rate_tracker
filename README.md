@@ -3,6 +3,13 @@
 This project is intended to run on a Raspberry Pi in order to read data from a
 MAX30105 light sensor and calculate pulse oximetry and heart rate (and maybe more).
 
+## Installing
+
+Currently this project is using Python 2 and is intended to be ran on a Raspberry Pi.
+The `requirements.txt` file lists the Python packages this project depends on.
+You can try installing by doing `pip install -r requirements.txt`. Before doing so,
+you may have to install Pandas with `sudo apt-get install python-pandas`.
+
 ## Usage
 
 Run `python2 main.py filename` from the RPi.
