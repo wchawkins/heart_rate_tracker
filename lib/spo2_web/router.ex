@@ -25,6 +25,7 @@ defmodule Spo2Web.Router do
     resources "/data", DataController
     get "/users/new", UserController, :new
     post "/users", UserController, :create
+    get "/dashboard", DashboardController, :index
   end
 
   # Other scopes may use custom stacks.

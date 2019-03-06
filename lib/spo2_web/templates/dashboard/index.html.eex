@@ -1,0 +1,5 @@
+<section class="phx-hero">
+  <h1><%= gettext "Welcome to your dashboard" %></h1>
+  <p>TODO: Put live and/or historical data here.</p>
+  <%= link "Live Data", to: Routes.graph_path(@conn, :index), class: "button" %>
+</section>
