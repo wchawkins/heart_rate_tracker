@@ -55,7 +55,8 @@ def main(raw_data_filename):
 
             if SEND_DATA:
                 send_spo2_and_hr(spo2, hr)
-                send_raw_data(red_buffer, ir_buffer)
+                # Only the send the latest raw data
+                # send_raw_data(red_buffer[-available_samples:], ir_buffer[-available_samples:])
 
             # Delete the oldest 32 samples from the buffer, so we're
             # keeping our data fresh and not too big for the next round

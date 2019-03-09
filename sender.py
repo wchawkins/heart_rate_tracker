@@ -9,7 +9,7 @@ def send_data(ws, username, spo2, hr, temp):
     ws.send(json.dumps(msg))
 
 def send_raw_data(ws, username, red_buffer, ir_buffer):
-    msg = {"topic": "sensor:" + username, "event": "new_data",
+    msg = {"topic": "sensor:" + username, "event": "new_raw_data",
            "payload": {"red_buffer": red_buffer, "ir_buffer": ir_buffer}, "ref": None}
     ws.send(json.dumps(msg))
 
