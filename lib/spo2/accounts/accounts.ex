@@ -44,6 +44,11 @@ defmodule Spo2.Accounts do
     |> Repo.preload(:credential)
   end
 
+  def get_user_by_username(username) do
+    Repo.get_by(User, username: username)
+    |> Repo.preload(:credential)
+  end
+
   @doc """
   Creates a user.
 
