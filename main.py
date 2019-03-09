@@ -19,6 +19,8 @@ def save_raw_data(red_buffer, ir_buffer, filename):
 def send_spo2_and_hr(spo2, hr):
     sender.send_data(WS, USERNAME, spo2, hr, 0)
 
+def send_raw_data(red_buffer, ir_buffer):
+    sender.send_raw_data(WS, USERNAME, red_buffer, ir_buffer)
 
 def main(raw_data_filename):
     m = MAX3010X()
@@ -53,6 +55,7 @@ def main(raw_data_filename):
 
             if SEND_DATA:
                 send_spo2_and_hr(spo2, hr)
+                send_raw_data(red_buffer, ir_buffer)
 
             # Delete the oldest 32 samples from the buffer, so we're
             # keeping our data fresh and not too big for the next round

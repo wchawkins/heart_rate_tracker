@@ -1,5 +1,6 @@
 from websocket import create_connection
 import json
+import urllib
 import sys
 
 def send_data(ws, username, spo2, hr, temp):
@@ -7,10 +8,18 @@ def send_data(ws, username, spo2, hr, temp):
            "payload": {"spo2": spo2, "hr": hr, "temp": temp}, "ref": None}
     ws.send(json.dumps(msg))
 
+def send_raw_data(ws, username, red_buffer, ir_buffer):
+    msg = {"topic": "sensor:" + username, "event": "new_data",
+           "payload": {"red_buffer": red_buffer, "ir_buffer": ir_buffer}, "ref": None}
+    ws.send(json.dumps(msg))
+
 def join(address, username):
     """ `address` should look like "ws://host:port" for non-SSL
     and "wss://host:port" for a SSL server """
 
+    params = {'vsn': '2.0.0', 'token': 'super_secret_token'}
+    # TODO: Figure out why this crashes/kills the websocket connection
+    # address = address + '/socket/websocket?' + urllib.urlencode(params)
     address = address + '/socket/websocket'
     ws = create_connection(address)
     join = { "topic": "sensor:" + username, "event": "phx_join", "payload": {},
