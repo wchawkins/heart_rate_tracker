@@ -13,4 +13,11 @@ defmodule Spo2Web.SensorChannel do
     # TODO: Persist data to database
     {:noreply, socket}
   end
+
+  # Handle the raw red, IR light data from the sensor
+  def handle_in("new_raw_data", %{"red_buffer" => red_buffer, "ir_buffer" => ir_buffer}, socket) do
+    broadcast!(socket, "new_raw_data", %{red_buffer: red_buffer, ir_buffer: ir_buffer})
+    # TODO: Persist data to database
+    {:noreply, socket}
+  end
 end
