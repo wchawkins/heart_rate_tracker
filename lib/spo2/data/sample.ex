@@ -6,6 +6,8 @@ defmodule Spo2.Data.Sample do
   schema "samples" do
     field :spo2, :float
     field :heart_rate, :float
+    field :red_buffer, {:array, :float}
+    field :ir_buffer, {:array, :float}
     belongs_to :user, User
 
     timestamps()
@@ -14,6 +16,6 @@ defmodule Spo2.Data.Sample do
   @doc false
   def changeset(sample, attrs) do
     sample
-    |> cast(attrs, [:spo2, :heart_rate])
+    |> cast(attrs, [:spo2, :heart_rate, :red_buffer, :ir_buffer])
   end
 end

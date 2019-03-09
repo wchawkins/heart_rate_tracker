@@ -11,15 +11,15 @@ defmodule Spo2Web.SensorChannel do
   end
 
   # handle spo2 and heart rate
-  def handle_in("new_data", %{"spo2" => spo2, "hr" => hr}, socket) do
-    broadcast!(socket, "new_data", %{spo2: spo2, hr: hr})
+  def handle_in("new_data", sample, socket) do
+    broadcast!(socket, "new_data", sample)
     # Save in database
     user = Accounts.get_user_by_username(socket.assigns.username)
-    Data.save_sample(user, %{spo2: spo2, heart_rate: hr})
+    Data.save_sample(user, sample)
     {:noreply, socket}
   end
 
-  # Handle the raw red, IR light data from the sensor
+  # Not using this currently
   def handle_in("new_raw_data", %{"red_buffer" => red_buffer, "ir_buffer" => ir_buffer}, socket) do
     broadcast!(socket, "new_raw_data", %{red_buffer: red_buffer, ir_buffer: ir_buffer})
     # TODO: Persist data to database

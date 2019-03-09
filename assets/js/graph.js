@@ -282,12 +282,8 @@ let channel = socket.channel("sensor:" + username, { params: { token: token } })
 let messagesContainer = document.querySelector("#messages")
 
 channel.on("new_data", payload => {
-  // console.log(payload)
-  plot(payload.spo2, payload.hr)
-})
-
-channel.on("new_raw_data", payload => {
-  // console.log(payload)
+  console.log(payload)
+  plot(payload.spo2, payload.heart_rate)
   plot_raw_data(payload.red_buffer, payload.ir_buffer)
 })
 
