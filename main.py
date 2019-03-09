@@ -16,8 +16,8 @@ def save_raw_data(red_buffer, ir_buffer, filename):
         for i in range(len(red_buffer)):
             file.write("%d,%d\n" % (red_buffer[i], ir_buffer[i]))
 
-def send_spo2_and_hr(spo2, hr):
-    sender.send_data(WS, USERNAME, spo2, hr, 0)
+def send_data(spo2, hr, red_buffer, ir_buffer):
+    sender.send_data(WS, USERNAME, spo2, hr, red_buffer, ir_buffer)
 
 def send_raw_data(red_buffer, ir_buffer):
     sender.send_raw_data(WS, USERNAME, red_buffer, ir_buffer)
@@ -49,20 +49,20 @@ def main(raw_data_filename):
             ir_buffer.append(ir)
     
         # Wait until we have a decent sample size before running calculations
-        if len(red_buffer) > 100:
+        # 250 samples should happen after ~4 sec
+        if len(red_buffer) >= 250:
             spo2, hr = calculate_spo2_and_hr(red_buffer, ir_buffer, SAMPLE_RATE, SAMPLE_AVG)
             print spo2, hr
 
             if SEND_DATA:
-                send_spo2_and_hr(spo2, hr)
-                # Only the send the latest raw data
+                send_data(spo2, hr, red_buffer[-available_samples:], ir_buffer[-available_samples:])
                 # send_raw_data(red_buffer[-available_samples:], ir_buffer[-available_samples:])
 
-            # Delete the oldest 32 samples from the buffer, so we're
+            # Delete the old samples from the buffer, so we're
             # keeping our data fresh and not too big for the next round
             # of calculations 
-            del red_buffer[:32]
-            del ir_buffer[:32]
+            del red_buffer[:available_samples]
+            del ir_buffer[:available_samples]
 
         save_raw_data(red_buffer, ir_buffer, raw_data_filename)
 

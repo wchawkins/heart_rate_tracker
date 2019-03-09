@@ -3,9 +3,10 @@ import json
 import urllib
 import sys
 
-def send_data(ws, username, spo2, hr, temp):
+def send_data(ws, username, spo2, hr, red_buffer, ir_buffer):
     msg = {"topic": "sensor:" + username, "event": "new_data",
-           "payload": {"spo2": spo2, "hr": hr, "temp": temp}, "ref": None}
+           "payload": {"spo2": spo2, "heart_rate": hr,
+           "red_buffer": red_buffer, "ir_buffer": ir_buffer, "user_id": 7}, "ref": None}
     ws.send(json.dumps(msg))
 
 def send_raw_data(ws, username, red_buffer, ir_buffer):
@@ -37,6 +38,6 @@ if __name__ == "__main__":
     username = sys.argv[2]
 
     ws = join(address, username)
-    send_data(ws, username, 98, 64, 32)
-    send_data(ws, username, 95, 60, 31)
+    # send_data(ws, username, 98, 64, 32)
+    # send_data(ws, username, 95, 60, 31)
     ws.close()

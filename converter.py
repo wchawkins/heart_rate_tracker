@@ -48,8 +48,8 @@ def calculate_spo2_and_hr(red_buffer, ir_buffer, sample_rate, sample_avg):
     freq = SR*freq/len_data
 
     heart_rate = freq[indices]* 60 # HR in bpm
-
-    return rounded_spo2[0], heart_rate
+    
+    return np.median(rounded_spo2), heart_rate
 
 if __name__ == '__main__':
     pass
