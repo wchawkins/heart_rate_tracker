@@ -281,10 +281,17 @@ let channel = socket.channel("sensor:" + username, { params: { token: token } })
 
 let messagesContainer = document.querySelector("#messages")
 
+const spo2Value = document.getElementById('spo2-value')
+const hrValue = document.getElementById('hr-value')
+
 channel.on("new_data", payload => {
   console.log(payload)
   plot(payload.spo2, payload.heart_rate)
   plot_raw_data(payload.red_buffer, payload.ir_buffer)
+
+  // Update the value indicator
+  spo2Value.innerText = Math.round(payload.spo2) + "%"
+  hrValue.innerText = Math.round(payload.heart_rate) + " bpm"
 })
 
 channel.join()
