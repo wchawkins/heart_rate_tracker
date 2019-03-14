@@ -1,3 +1,5 @@
-<h1>Sign up</h1>
+<div class="form-center">
+<h1 class="text-center">Sign up</h1>
 
 <%= render "form.html", Map.put(assigns, :action, Routes.user_path(@conn, :create)) %>
+</div>

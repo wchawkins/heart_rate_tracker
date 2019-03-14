@@ -1,5 +1,19 @@
-<section class="phx-hero">
-  <h1><%= gettext "Welcome to your dashboard" %></h1>
-  <p>TODO: Put live and/or historical data here.</p>
-  <%= link "Live Data", to: Routes.graph_path(@conn, :index), class: "button" %>
-</section>
+<div class="jumbotron text-center">
+		<h1><%= gettext "My Dashboard", user: @current_user.username %></h1>
+
+	<div class="row">
+		<div class="col-sm">
+			<div id="spo2">
+				<h2>O<sub>2</sub> Saturation</h2>
+				<%= link "Live Data", to: Routes.graph_path(@conn, :index), class: "btn btn-outline-primary" %>
+			</div>
+		</div>
+
+		<div class="col-sm">
+			<div id="hr">
+				<h2>Heart Rate</h2>
+				<%= link "Live Data", to: Routes.graph_path(@conn, :index), class: "btn btn-outline-primary" %>
+			</div>
+		</div>
+	</div>
+</div	>
