@@ -5,7 +5,7 @@ from __future__ import print_function
 from time import sleep
 
 # import RPi.GPIO as GPIO
-import smbus
+import smbus2 as smbus
 
 # i2c address-es
 # not required?
@@ -34,9 +34,9 @@ REG_PILOT_PA = 0x10
 REG_MULTI_LED_CTRL1 = 0x11
 REG_MULTI_LED_CTRL2 = 0x12
 
-REG_TEMP_INTR = 0x1F
+REG_TEMP_INT = 0x1F
 REG_TEMP_FRAC = 0x20
-REG_TEMP_CONFIG = 0x21
+REG_TEMP_ENABLE = 0x21
 REG_PROX_INT_THRESH = 0x30
 REG_REV_ID = 0xFE
 REG_PART_ID = 0xFF
@@ -217,10 +217,10 @@ class MAX3010X():
         red_buf = []
         ir_buf = []
         for i in range(amount):
-            while(GPIO.input(self.interrupt) == 1):
+            # while(GPIO.input(self.interrupt) == 1):
                 # wait for interrupt signal, which means the data is available
                 # do nothing here
-                pass
+                # pass
 
             red, ir = self.read_from_fifo()
 
@@ -258,3 +258,12 @@ class MAX3010X():
         print(num_available_samples)
         for i in range(num_available_samples):
             print(self.read_from_fifo())
+
+    def read_temp(self):
+        """ Returns the die temp in degrees C """
+        # We have to tell the sensor to start a temp reading 
+        # and wait a bit before retrieving it
+        self._write(REG_TEMP_ENABLE, [1])
+        sleep(0.1)
+        whole, fraction = self._read(REG_TEMP_INT, 2)
+        return whole + (fraction * 0.0625)
