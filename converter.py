@@ -5,7 +5,7 @@ pulse oximetry and heart rate data.
 import math
 import pandas as pd
 import numpy as np
-from scipy.signal import butter, lfilter, filtfilt, find_peaks
+from scipy.signal import butter, lfilter, filtfilt
 import csv
 
 def calculate_spo2_and_hr(red_buffer, ir_buffer, sample_rate, sample_avg):
@@ -51,21 +51,19 @@ def calculate_spo2_and_hr(red_buffer, ir_buffer, sample_rate, sample_avg):
 
 
     # Calculate the time (ms) b/w peaks for HR variability 
-    peaks, props = find_peaks(filtered_time_data)
-    print peaks
+    # peaks, props = find_peaks(filtered_time_data)
+    # print peaks
 
-    ppi = []
-    for i in range(len(peaks)-1):
-        num_samples_bw_peaks = peaks[i+1] - peaks[i]
-        time_bw_peaks_in_ms = 1.0 * num_samples_bw_peaks / SR * 1000.0
-        ppi.append(time_bw_peaks_in_ms)
+    # ppi = []
+    # for i in range(len(peaks)-1):
+        # num_samples_bw_peaks = peaks[i+1] - peaks[i]
+        # time_bw_peaks_in_ms = 1.0 * num_samples_bw_peaks / SR * 1000.0
+        # ppi.append(time_bw_peaks_in_ms)
 
-    print ppi
-    print np.std(ppi)
+    # print ppi
+    # print np.std(ppi)
 
-    # return np.median(rounded_spo2), heart_rate
-    # print rounded_spo2
-    return rounded_spo2[0], heart_rate
+    return np.median(rounded_spo2), heart_rate
 
 if __name__ == '__main__':
     red_list = []
