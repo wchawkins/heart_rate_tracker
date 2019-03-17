@@ -8,6 +8,7 @@ defmodule Spo2.Data.Sample do
     field :heart_rate, :float
     field :red_buffer, {:array, :float}
     field :ir_buffer, {:array, :float}
+    field :temp, :float
     belongs_to :user, User
 
     timestamps()
@@ -16,6 +17,6 @@ defmodule Spo2.Data.Sample do
   @doc false
   def changeset(sample, attrs) do
     sample
-    |> cast(attrs, [:spo2, :heart_rate, :red_buffer, :ir_buffer])
+    |> cast(attrs, [:spo2, :heart_rate, :red_buffer, :ir_buffer, :temp])
   end
 end
