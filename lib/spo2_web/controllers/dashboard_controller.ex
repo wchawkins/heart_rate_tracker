@@ -10,14 +10,14 @@ defmodule Spo2Web.DashboardController do
   # Maybe this should be called the "SampleController" since technically
   # that's what we're wanting to render
   def spo2(conn, _opts) do
-    render(conn, "graph.html", name: "spo2", title: "SpO2")
+    render(conn, "graph.html", name: "spo2", title: "SpO2", units: "%")
   end
 
   def heart_rate(conn, _opts) do
-    render(conn, "graph.html", name: "heart_rate", title: "Heart Rate")
+    render(conn, "graph.html", name: "heart_rate", title: "Heart Rate", units: "bpm")
   end
 
   def skin_temp(conn, _opts) do
-    render(conn, "graph.html", name: "temp", title: "Skin Temperature")
+    render(conn, "graph.html", name: "temp", title: "Skin Temperature", units: "°C")
   end
 end

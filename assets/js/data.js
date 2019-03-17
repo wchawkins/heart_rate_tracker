@@ -88,13 +88,17 @@ function plot(data) {
 const meta = document.getElementById('metadata').dataset;
 const username = meta.username;
 const type = meta.type;
+const units = meta.units;
 let token = '';
+
+const valueIndicator = document.getElementById('value');
 
 let channel = socket.channel("sensor:" + username, { params: { token: token } })
 
 channel.on("new_data", payload => {
-  console.log(payload)
-  plot(payload[type])
+  const data = payload[type]
+  plot(data)
+  value.innerText = Math.round(data) + units;
 })
 
 channel.join()

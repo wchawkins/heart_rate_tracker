@@ -1,6 +1,6 @@
 <h1><%= @title %></h1>
 
-<meta id="metadata" data-type="<%= @name %>" data-username="<%= @current_user.username %>">
+<meta id="metadata" data-type="<%= @name %>" data-username="<%= @current_user.username %>" data-units="<%= @units %>">
 
 <div class="">
 	<div class="row">
