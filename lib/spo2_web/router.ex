@@ -26,6 +26,11 @@ defmodule Spo2Web.Router do
     get "/users/new", UserController, :new
     post "/users", UserController, :create
     get "/dashboard", DashboardController, :index
+
+    # Sample Data
+    get "spo2", DashboardController, :spo2
+    get "hr", DashboardController, :heart_rate
+    get "temperature", DashboardController, :skin_temp
   end
 
   # Other scopes may use custom stacks.
