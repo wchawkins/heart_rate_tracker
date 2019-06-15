@@ -20,7 +20,8 @@ asdf is a convenient way to manage versions of the different runtimes required t
 
 The web app uses PostgresSQL as the database.
 
-There are several ways to install Postgres. My preferred method is to [use Docker](https://hub.docker.com/_/postgres). For Mac OS, there's [this](https://postgresapp.com/) (never tested it).
+There are several ways to install Postgres. My preferred method is to [use Docker](https://hub.docker.com/_/postgres), although Docker does have a bit of a learning curve.
+For Mac OS, there's [this tool](https://postgresapp.com/) - looks easy but never tried it.
 
 ## Install Phoenix and dependencies
 
