@@ -4,7 +4,7 @@ These instructions are intended to help you get your development environment set
 
 ## Clone the Project Repository
 
-1. Clone the git repository: `git clone git@gitlab.com:spo2/spo2-web.git`. This will create a local copy of the repo on your machine.
+1. Clone the git repository: `git clone https://gitlab.com/spo2/spo2-web.git`. This will create a local copy of the repo on your machine.
 2. Change directories to the project folder: `cd spo2-web`
 
 ## Install asdf tool manager
