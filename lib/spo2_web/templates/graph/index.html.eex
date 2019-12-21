@@ -1,0 +1,30 @@
+<h1>Live Data</h1>
+
+<div id="messages"></div>
+
+<%= tag :meta, name: "username",
+               content: assigns.current_user.username %>
+
+<div class="">
+	<div class="row">
+		<div class="col-sm">
+			<h2 id="spo2-value"></h2>
+			<canvas id="spo2-graph" width="400" height="400"></canvas>
+		</div>
+		<div class="col-sm">
+			<h2 id="hr-value"></h2>
+			<canvas id="hr-graph" width="400" height="400"></canvas>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm">
+			<canvas id="red-graph" width="400" height="400"></canvas>
+		</div>
+		<div class="col-sm">
+			<canvas id="ir-graph" width="400" height="400"></canvas>
+		</div>
+	</div>
+</div>
+
+<script>window.userToken = "<%= Phoenix.Token.sign(@conn, "user salt", @current_user.id)%>"</script> 
+<script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/graph.js") %>"></script>

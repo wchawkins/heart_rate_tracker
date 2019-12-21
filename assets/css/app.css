@@ -1,0 +1,10 @@
+/* Main application css */
+
+.alert:empty { display: none; }
+
+.form-center {
+	max-width: 400px;
+	margin: auto;
+}
+
+.form-center input[type=submit] {}

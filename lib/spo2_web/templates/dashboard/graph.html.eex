@@ -1,0 +1,15 @@
+<h1><%= @title %></h1>
+
+<meta id="metadata" data-type="<%= @name %>" data-username="<%= @current_user.username %>" data-units="<%= @units %>">
+
+<div class="">
+	<div class="row">
+		<div class="col-sm">
+			<h2 id="value"></h2>
+			<canvas id="live-graph" width="400" height="400"></canvas>
+		</div>
+	</div>
+</div>
+
+<script>window.userToken = "<%= Phoenix.Token.sign(@conn, "user salt", @current_user.id)%>"</script> 
+<script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/data.js") %>"></script>
