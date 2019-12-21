@@ -11,16 +11,15 @@ use Mix.Config
 # before starting your production server.
 config :spo2, Spo2Web.Endpoint,
   http: [:inet6, port: System.get_env("PORT") || 4000],
-  url: [scheme: "https", host: "spo2-web.herokuapp.com", port: 443],
+  url: [scheme: "http", host: "localhost", port: 4000],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json",
-  secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE")
+  server: true
 
 # Configure your database
 config :spo2, Spo2.Repo,
   url: System.get_env("DATABASE_URL"),
-  pool_size: String.to_integer(System.get_env("POOL_SIZE") || 15),
-  ssl: true
+  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "15")
 
 # Do not print debug messages in production
 config :logger, level: :info
