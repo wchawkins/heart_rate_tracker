@@ -1,20 +1,15 @@
-# Spo2
+# Heart Rate Tracker Web Application
 
-To start your Phoenix server:
+This is a web application that receives sensor readings from the Raspberry Pi for storage and visualization.
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
+It is written in [Elixir](https://elixir-lang.org/) and uses the [Phoenix web framework](https://www.phoenixframework.org/).
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+## Quick Start
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+If you just want to run the server, follow these steps.
 
-## Learn more
+TODO
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+## Developer Setup
+
+If you want to develop on the web app code, refer to the `CONTRIBUTING.md` file.
