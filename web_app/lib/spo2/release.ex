@@ -23,4 +23,15 @@ defmodule Spo2.Release do
     Application.load(@app)
     Application.fetch_env!(@app, :ecto_repos)
   end
+
+  def get_env(variable, default) do
+    System.get_env(variable) || default
+  end
+
+  def get_env(variable) do
+    System.get_env(variable) ||
+      raise """
+      environment variable #{variable} is missing.
+      """
+  end
 end

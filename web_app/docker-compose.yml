@@ -3,18 +3,23 @@ version: '3'
 services:
   db:
     image: postgres
-    ports:
-      - 7777:5432
 
   web:
     build: .
     ports:
       - 80:4000
+      - 443:4443
     environment:
+      - HTTP_PORT=4000
+      - HTTPS_PORT=4443
+      - DATABASE_URL=ecto://postgres:postgres@db/spo2
+      - SSL_KEY_PATH=/ssl/privkey.pem
+      - SSL_CERT_PATH=/ssl/cert.pem
+      - HOST
       - SECRET_KEY_BASE
-      # DATABASE_URL=ecto://postgres:postgres@db/spo2
-      - DATABASE_URL
-      - DOMAIN
     depends_on:
       - db
+    volumes:
+      - ./ssl:/ssl
     command: ["bin/spo2", "start"]
+    
