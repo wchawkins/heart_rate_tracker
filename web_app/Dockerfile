@@ -22,7 +22,7 @@ RUN mix deps.compile
 
 # build assets
 COPY assets assets
-RUN cd assets && npm install && npm run deploy
+RUN cd assets && npm ci && npm run deploy
 RUN mix phx.digest
 
 # build project
@@ -42,9 +42,5 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY --from=build /app/_build/prod/rel/spo2 ./
-RUN chown -R nobody: /app
-USER nobody
 
 ENV HOME=/app
-
-# CMD ["bin/spo2", "start"]

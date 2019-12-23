@@ -3,15 +3,17 @@ version: '3'
 services:
   db:
     image: postgres
+    volumes:
+      - heart_data:/var/lib/postgresql/data
 
   web:
     build: .
     ports:
-      - 80:4000
-      - 443:4443
+      - 80:80
+      - 443:443
     environment:
-      - HTTP_PORT=4000
-      - HTTPS_PORT=4443
+      - HTTP_PORT=80
+      - HTTPS_PORT=443
       - DATABASE_URL=ecto://postgres:postgres@db/spo2
       - SSL_KEY_PATH=/ssl/privkey.pem
       - SSL_CERT_PATH=/ssl/cert.pem
@@ -23,3 +25,5 @@ services:
       - ./ssl:/ssl
     command: ["bin/spo2", "start"]
     
+volumes:
+  heart_data:
