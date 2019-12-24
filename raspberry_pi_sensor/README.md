@@ -63,14 +63,28 @@ In order to connect to the Pi in a console/terminal-based fashion, use Secure Sh
 
 `ssh pi@pi-zero.local`
 
-and then enter your username (pi) and password (raspberrypi). This assumes the Pi's hostname is `pi-zero` and your computer and the Pi are connected to the same local network (hence the `.local`). See the section below on Wifi for configuring wireless networks.
+and then enter your username and password. **This assumes the Pi's hostname is `pi-zero` and your computer and the Pi are connected to the same local network (hence the `.local`).** See the section below on Wifi for configuring wireless networks.
 
 ### Copying to Pi with SSH
 To copy files to the Pi, you could use a flash drive or email but SSH is nice once you get the hang of it, since it lets you copy the file and then remote into the Pi with a couple commands.
 
 SSH provides a tool called `scp` to securely copy files to and from remote machines.
 
-Run `scp filename pi@pi-zero.local:`to copy the `filename` file from your computer to the Pi.
+Run `scp filename pi@pi_name.local:`to copy the `filename` file from your computer to the Pi.
+
+The following filed must be copied from the repository to your pi!
+
+converter.py
+
+main.py
+
+requirements.txt
+
+ir_pulse_ox_converter.py
+
+max3010X.py
+
+sender.py
 
 If you get stuck... here is a helpful article about SSH'ing into Pi's
 https://itsfoss.com/ssh-into-raspberry/
